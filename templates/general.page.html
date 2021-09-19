@@ -1,0 +1,57 @@
+{{template "base" .}}
+
+{{define "style"}}
+<style>
+    .datepicker {
+        z-index: 100000;
+    }
+</style>
+{{end}}
+
+{{define "content"}}
+<div class="container">
+    <div class="card text-center">
+        <img src="/static/images/sn-3.jpg" class="img-fluid" alt="Sofi Nia 4">
+        <div class="card-body">
+            <div class="row justify-content-md-center">
+                <div class="col-md-8">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <button id="search-availability-btn" type="button" class="btn btn-primary">Search
+                        Availability</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "script"}}
+<script>
+    document.getElementById('search-availability-btn').addEventListener('click', function () {
+        let html = `
+            <form method="POST" class="needs-validation" novalidate>
+                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+                <div id="date-range-picker" class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="text" class="form-control" id="start_date" name="start"
+                                placeholder="Arrival" aria-describedby="startDateHelp" required disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="text" class="form-control" id="end_date" name="end"
+                                placeholder="Departure" aria-describedby="endDateHelp" required disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        `
+
+        attention.custom({ msg: html })
+    })
+</script>
+{{end}}

@@ -25,5 +25,34 @@ func NewHandlers(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) Search(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "search.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) PostSearch(w http.ResponseWriter, r *http.Request) {
+	start := r.FormValue("start")
+	w.Write([]byte(start))
+}
+
+func (m *Repository) General(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "general.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) Major(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "major.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{})
 }
