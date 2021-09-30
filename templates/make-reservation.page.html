@@ -6,25 +6,52 @@
         <div class="row justify-content-md-center mt-4 mb-4">
             <div class="col-md-6">
                 <div clFass="card-body">
-                    <form method="GET" class="needs-validation" novalidate>
+                    {{$res := index .Data "reservation"}}
+                    <form action="/make-reservation" method="POST" class="needs-validation" novalidate>
+                        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="first-name" aria-describedby="firstnameHelp"
-                                required>
+                            <input type="text"
+                                class='form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}'
+                                id="first-name" name="first_name" aria-describedby="firstnameHelp" value="{{$res.FirstName}}" required>
+                            {{with .Form.Errors.Get "first_name"}}
+                            <div class="text-danger">
+                                {{.}}
+                            </div>
+                            {{end}}
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="last-name" aria-describedby="firstnameHelp"
-                                required>
+                            <input type="text" class='form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}'
+                                id="first-name" id="last-name" name="last_name"
+                                aria-describedby="lastnameHelp" value="{{$res.LastName}}" required>
+                            {{with .Form.Errors.Get "last_name"}}
+                            <div class="text-danger">
+                                {{.}}
+                            </div>
+                            {{end}}
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+                            <input type="email" class='form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}'
+                                id="first-name" id="email" aria-describedby="emailHelp"
+                                name="email" value="{{$res.Email}}" required>
+                            {{with .Form.Errors.Get "email"}}
+                            <div class="text-danger">
+                                {{.}}
+                            </div>
+                            {{end}}
                         </div>
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="phone-number" aria-describedby="phoneNumberHelp"
-                                required>
+                            <input type="text" class='form-control {{with .Form.Errors.Get "phone_number"}} is-invalid {{end}}'
+                                id="first-name" id="phone-number" name="phone_number"
+                                aria-describedby="phoneNumberHelp" value="{{$res.PhoneNumber}}" required>
+                            {{with .Form.Errors.Get "phone_number"}}
+                            <div class="text-danger">
+                                {{.}}
+                            </div>
+                            {{end}}
                         </div>
                         <button type="submit" class="btn btn-primary">Make Reservation</button>
                     </form>

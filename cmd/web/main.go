@@ -1,15 +1,17 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/polluxdev/go-booking-app/pkg/config"
-	"github.com/polluxdev/go-booking-app/pkg/handlers"
-	"github.com/polluxdev/go-booking-app/pkg/render"
+	"github.com/polluxdev/go-booking-app/internal/config"
+	"github.com/polluxdev/go-booking-app/internal/handlers"
+	"github.com/polluxdev/go-booking-app/internal/models"
+	"github.com/polluxdev/go-booking-app/internal/render"
 )
 
 const portNumber = ":8080"
@@ -22,6 +24,7 @@ var session *scs.SessionManager
 // var errorLog *log.Logger
 
 func main() {
+	gob.Register(models.Reservation{})
 	app.InProduction = false
 
 	session = scs.New()
@@ -42,7 +45,7 @@ func main() {
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 
-	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber))
+	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber), "")
 	// _ = http.ListenAndServe(portNumber, nil)
 
 	srv := &http.Server{

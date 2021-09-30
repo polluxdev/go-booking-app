@@ -30,8 +30,7 @@
 <script>
     document.getElementById('search-availability-btn').addEventListener('click', function () {
         let html = `
-            <form method="POST" class="needs-validation" novalidate>
-                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            <form method="POST" id="check-availability-form" class="needs-validation" novalidate>
                 <div id="date-range-picker" class="row">
                     <div class="col">
                         <div class="mb-3">
@@ -51,7 +50,37 @@
             </form>
         `
 
-        attention.custom({ msg: html })
+        attention.custom({
+            msg: html,
+            title: "Choose your dates",
+            willOpen: () => {
+                const elem = document.getElementById('date-range-picker')
+                const rp = new DateRangePicker(elem, {
+                    buttonClass: 'btn',
+                    format: 'dd-mm-yyyy',
+                    showOnFocus: true
+                })
+            },
+            didOpen: () => {
+                document.getElementById('start_date').removeAttribute('disabled')
+                document.getElementById('end_date').removeAttribute('disabled')
+            },
+            callback: function (result) {
+                let form = document.getElementById('check-availability-form'),
+                    formData = new FormData(form)
+                formData.append('csrf_token', '{{.CSRFToken}}')
+
+                fetch('/search-availability-json', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(err => console.log(err))
+            }
+        })
     })
 </script>
 {{end}}
