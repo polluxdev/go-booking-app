@@ -16,15 +16,35 @@ import (
 
 const portNumber = ":8080"
 
-var app config.AppConfig
-
-var session *scs.SessionManager
+var (
+	app     config.AppConfig
+	session *scs.SessionManager
+)
 
 // var infoLog *log.Logger
 // var errorLog *log.Logger
 
 func main() {
+	err := run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber), "")
+	// _ = http.ListenAndServe(portNumber, nil)
+
+	srv := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+
+	err = srv.ListenAndServe()
+	log.Fatal(err)
+}
+
+func run() (err error) {
 	gob.Register(models.Reservation{})
+
 	app.InProduction = false
 
 	session = scs.New()
@@ -32,6 +52,8 @@ func main() {
 	session.Cookie.Persist = true
 	session.Cookie.SameSite = http.SameSiteLaxMode
 	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
@@ -45,14 +67,5 @@ func main() {
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 
-	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber), "")
-	// _ = http.ListenAndServe(portNumber, nil)
-
-	srv := &http.Server{
-		Addr:    portNumber,
-		Handler: routes(&app),
-	}
-
-	err = srv.ListenAndServe()
-	log.Fatal(err)
+	return
 }
