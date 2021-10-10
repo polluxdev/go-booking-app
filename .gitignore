@@ -1,0 +1,6 @@
+database.yml
+run.sh
+bookings
+coverage.out
+
+migrations/schema.sql
